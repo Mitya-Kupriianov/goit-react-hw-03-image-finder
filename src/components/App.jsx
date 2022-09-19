@@ -66,7 +66,8 @@ export class App extends Component {
     }
   };
 
-  onSubmit = async searchValue => {
+  onSubmit = searchValue => {
+    // event.preventDefault();
     this.setState(_ => ({
       searchValue,
       images: [],
