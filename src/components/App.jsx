@@ -27,23 +27,20 @@ export class App extends Component {
 
   getImages = async () => {
     this.setState({ isLoading: true });
-
     try {
       const {
         data: { hits, totalHits },
       } = await searchImages(this.state.searchValue, this.state.page);
 
       if (this.state.page === 1) {
-        if (!totalHits) {
+        if (totalHits === 0) {
           this.setState({
             isLoading: false,
           });
           return Notiflix.Notify.failure('No results, try again');
         }
 
-        Notiflix.Notify.success(
-          `Please, enter another search parameters ${totalHits}`
-        );
+        Notiflix.Notify.success(`We found ${totalHits} images`);
 
         this.setState({
           totalHits,
@@ -51,9 +48,13 @@ export class App extends Component {
       }
 
       this.setState(prevState => ({
+        isLoading: false,
+
         images: [...prevState.images, ...hits],
-        isLoading: !prevState.isLoading,
       }));
+
+      // this.setState({
+      // });
     } catch (error) {
       this.setState({ error: error.message });
       Notiflix.Notify.failure(`Error - ${error.message}`);
@@ -62,18 +63,20 @@ export class App extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-    console.log(event);
-    const query = event.target.elements.query.value;
-    // console.log(query);
-    if (query.trim() !== this.state.searchValue || this.state.page !== 1) {
+    const query = event.target.elements.query.value.trim().toLowerCase();
+
+    if (query === '') {
+      Notiflix.Notify.warning('Please, enter another search parameters');
+      return;
+    }
+
+    if (query !== this.state.searchValue || this.state.page !== 1) {
       this.setState({
         searchValue: query,
         images: [],
         page: 1,
         totalHits: 0,
       });
-    } else {
-      Notiflix.Notify.warning('Please, enter another search parameters');
     }
     event.target.reset();
   };
@@ -98,12 +101,12 @@ export class App extends Component {
       >
         <Searchbar handleSubmit={this.onSubmit} />
         {isLoading && <Loader />}
+
         {error && (
           <h2 style={{ margin: 'auto' }}>Something went wrong, try again</h2>
         )}
-        {/* {console.log(11111, isLoading)}
-        {console.log(2222, images)} */}
-        {!isLoading && images.length > 0 && <ImageGallery data={images} />}
+
+        {images.length > 0 && <ImageGallery data={images} />}
         {images.length < totalHits && <Button onClick={this.handleClick} />}
       </div>
     );

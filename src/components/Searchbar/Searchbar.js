@@ -5,9 +5,7 @@ export default function Searchbar({ handleSubmit }) {
   return (
     <header className={s.searchbar}>
       <form className={s.form} onSubmit={handleSubmit}>
-        <button type="submit" className={s.button}>
-          <span className="label">Search</span>
-        </button>
+        <button type="submit" className={s.button}></button>
 
         <input
           name="query"
@@ -22,4 +20,4 @@ export default function Searchbar({ handleSubmit }) {
   );
 }
 
-Searchbar.propTypes = { onSubmit: PropTypes.func.isRequired };
+Searchbar.propTypes = { onSubmit: PropTypes.func };
