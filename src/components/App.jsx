@@ -72,8 +72,9 @@ export class App extends Component {
         page: 1,
         totalHits: 0,
       });
+    } else {
+      Notiflix.Notify.warning('Please, enter another search parameters');
     }
-    Notiflix.Notify.warning('Please, enter another search parameters');
     event.target.reset();
   };
 
@@ -95,7 +96,7 @@ export class App extends Component {
           paddingBottom: '24px',
         }}
       >
-        <Searchbar onSubmit={this.onSubmit} />
+        <Searchbar handleSubmit={this.onSubmit} />
         {isLoading && <Loader />}
         {error && (
           <h2 style={{ margin: 'auto' }}>Something went wrong, try again</h2>
