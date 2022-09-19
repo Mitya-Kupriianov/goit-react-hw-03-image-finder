@@ -27,12 +27,6 @@ export class App extends Component {
 
   getImages = async () => {
     this.setState({ isLoading: true });
-    if (this.state.searchValue === '') {
-      this.setState({
-        isLoading: false,
-      });
-      return Notiflix.Notify.warning('Please, enter another search parameters');
-    }
 
     try {
       const {
@@ -66,16 +60,21 @@ export class App extends Component {
     }
   };
 
-  onSubmit = searchValue => {
-    // event.preventDefault();
-    this.setState(_ => ({
-      searchValue,
-      images: [],
-      page: 1,
-      totalHits: 0,
-      isLoading: false,
-      error: null,
-    }));
+  onSubmit = event => {
+    event.preventDefault();
+    console.log(event);
+    const query = event.target.elements.query.value;
+    // console.log(query);
+    if (query.trim() !== this.state.searchValue || this.state.page !== 1) {
+      this.setState({
+        searchValue: query,
+        images: [],
+        page: 1,
+        totalHits: 0,
+      });
+    }
+    Notiflix.Notify.warning('Please, enter another search parameters');
+    event.target.reset();
   };
 
   handleClick = event => {

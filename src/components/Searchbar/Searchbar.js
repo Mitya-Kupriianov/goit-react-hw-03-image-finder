@@ -3,34 +3,16 @@ import s from './Searchbar.module.css';
 import PropTypes from 'prop-types';
 
 export default class Searchbar extends Component {
-  static propTypes = { onSubmit: PropTypes.func.isRequired };
-
-  state = { text: '' };
-
-  handleChange = e => {
-    const { type, value } = e.currentTarget;
-    this.setState({ [type]: value });
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-
-    this.props.onSubmit(this.state.text.trim());
-
-    this.setState({ text: '' });
-  };
-
   render() {
     return (
       <header className={s.searchbar}>
-        <form className={s.form} onSubmit={this.handleSubmit}>
+        <form className={s.form} onSubmit={this.props.handleSubmit}>
           <button type="submit" className={s.button}>
             <span className="label">Search</span>
           </button>
 
           <input
-            onChange={this.handleChange}
-            value={this.state.text}
+            name="query"
             className={s.input}
             type="text"
             autoComplete="off"
